@@ -32,20 +32,20 @@ Camera-ready PDF: [`paper/sinconf2026_camera_ready.pdf`](paper/sinconf2026_camer
 
 **Shallow Probes Are Sufficient for Near-Oracle Personalization Depth Allocation in Federated Learning**
 
-The offline oracle scores every depth \(P_0,\ldots,P_5\) with
+The offline oracle scores every depth $P_0,\ldots,P_5$ with
 
-\[
-U_i(a)=\mathrm{Macro\text{-}F1}_i(a)-\lambda\,\mathrm{Cost}_i(a).
-\]
+$$
+U_i(a) = \text{Macro-F1}_i(a) - \lambda \cdot \text{Cost}_i(a).
+$$
 
-That search is informative and not deployable. This study asks whether probes at \(P_0\), \(P_1\), and \(P_2\) already contain most of the decision-relevant information.
+That search is informative and not deployable. This study asks whether probes at $P_0$, $P_1$, and $P_2$ already contain most of the decision-relevant information.
 
 | 📌 Check | 📈 Camera-ready audit |
 | --- | --- |
 | ⚡ Greedy probe regret | **0.0071** |
 | 🎯 Oracle recovery | **98.3%** |
 | 🧠 FedPBA regret / recovery | 0.0110 / 97.3% |
-| 🔗 Shallow-best vs oracle | \(r = 0.9818\) (deep-oracle rows: \(0.578\)) |
+| 🔗 Shallow-best vs oracle | $r = 0.9818$ (deep-oracle rows: $0.578$) |
 | 🧪 Scale | 45 sessions · 900 clients · 2700 evaluations · GroupKFold |
 
 Datasets: **CIFAR-10**, **CIFAR-100**, and **patient-disjoint PTB-XL** (Lead II). FedPBA is a learned check for deep-action extrapolation, not a new federated optimizer. PTB-XL deep-oracle clients remain the failure boundary.
@@ -53,12 +53,13 @@ Datasets: **CIFAR-10**, **CIFAR-100**, and **patient-disjoint PTB-XL** (Lead II)
 ## 🗺️ How a decision is made
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": true, "padding": 24, "nodeSpacing": 36, "rankSpacing": 48}}}%%
 flowchart TD
-    A["🌐 FedAvg global model"] --> B["🔎 Shallow probes<br/>P0 · P1 · P2"]
-    B --> C{"📐 Is the shallow<br/>measurement enough?"}
-    C -->|"Yes, most clients"| D["⚡ Greedy probe<br/>deploy the best of P0–P2"]
-    C -->|"Deep-oracle boundary"| E["🧠 FedPBA<br/>extrapolate toward P3–P5"]
-    D --> F["📊 Utility against<br/>the offline oracle"]
+    A["FedAvg"] --> B["Probes P0 to P2"]
+    B --> C{"Shallow enough?"}
+    C -->|Most clients| D["Greedy best probe"]
+    C -->|Deep boundary| E["FedPBA to P3–P5"]
+    D --> F["Utility vs oracle"]
     E --> F
 
     style A fill:#1d4ed8,color:#ffffff,stroke:#1e3a8a,stroke-width:2px
